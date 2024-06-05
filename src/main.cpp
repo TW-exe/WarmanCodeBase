@@ -4,10 +4,16 @@
 
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
-#define MOTOR_STEPS 200
+const float MOTOR_STEPS = 200;
 
-#define WHEELRADIUS 40//in mm 
+const int WHEELRADIUS = 40; //in mm 
 
+const float wheelCenterRadius = 180; //in mm
+
+//Math constants
+const float pi = 3.1415926;
+
+//Pin constants
 #define DIR 8
 #define STEP 9
 
@@ -33,7 +39,11 @@ A4988 stepperFrontRight(MOTOR_STEPS, DIR, STEP, MS4, MS5, MS6); //
 
 // Functions 
 void move_forward(float distance, float vel) {
-  int RPM = vel/(40); // velocity is in mm per second
+  
+  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
+
+  int steps = (100/pi)*(distance/WHEELRADIUS);
+
   stepperFrontLeft.begin(RPM);
   stepperFrontRight.begin(RPM);
 
@@ -43,26 +53,81 @@ void move_forward(float distance, float vel) {
   stepperFrontLeft.setMicrostep(1);
   stepperFrontRight.setMicrostep(1);
 
-  stepperFrontLeft.move();
-  stepperFrontRight.move();
-
-
+  stepperFrontLeft.move(steps);
+  stepperFrontRight.move(-steps);
 }
 
 
-void move_backward(){
 
+
+
+
+void move_backward(float distance, float vel){
+  
+  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
+
+  int steps = (100/pi)*(distance/WHEELRADIUS);
+
+  stepperFrontLeft.begin(RPM);
+  stepperFrontRight.begin(RPM);
+
+  stepperFrontLeft.enable();
+  stepperFrontRight.enable();
+
+  stepperFrontLeft.setMicrostep(1);
+  stepperFrontRight.setMicrostep(1);
+
+  stepperFrontLeft.move(steps);
+  stepperFrontRight.move(-steps);
+}
+
+//angVel is in degrees per second
+void rotate_clockwise(float degrees, float angVel){
+  float vel = (angVel * (2*pi/360)) * wheelCenterRadius;
+
+  float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
+
+  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
+
+  int steps = (100/pi)*(distance/WHEELRADIUS);
+
+  stepperFrontLeft.begin(RPM);
+  stepperFrontRight.begin(RPM);
+
+  stepperFrontLeft.enable();
+  stepperFrontRight.enable();
+
+  stepperFrontLeft.setMicrostep(1);
+  stepperFrontRight.setMicrostep(1);
+
+  stepperFrontLeft.move(steps);
+  stepperFrontRight.move(steps);
 }
 
 
-void rotate_clockwise(){
 
+void rotate_anticlockwise(float degrees, float angVel){
+  float vel = (angVel * (2*pi/360)) * wheelCenterRadius;
+
+  float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
+
+  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
+
+  int steps = (100/pi)*(distance/WHEELRADIUS);
+
+  stepperFrontLeft.begin(RPM);
+  stepperFrontRight.begin(RPM);
+
+  stepperFrontLeft.enable();
+  stepperFrontRight.enable();
+
+  stepperFrontLeft.setMicrostep(1);
+  stepperFrontRight.setMicrostep(1);
+
+  stepperFrontLeft.move(-steps);
+  stepperFrontRight.move(-steps);
 }
 
-
-void rotate_anticlockwise(){
-
-}
 
 
 

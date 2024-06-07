@@ -1,6 +1,8 @@
 //libraries
 #include <Arduino.h>
-#include <A4988.h>
+#include <AccelStepper.h>
+
+
 
 
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
@@ -14,26 +16,20 @@ const float wheelCenterRadius = 180; //in mm
 const float pi = 3.1415926;
 
 //Pin constants
-#define DIR 8
-#define STEP 9
+#define dirPin1 8
+#define pulsePin1 9
 
-#define MS1 10
-#define MS2 11
-#define MS3 12
-
-#define MS4 5
-#define MS5 6
-#define MS6 7
-
-
-A4988 stepperFrontLeft(MOTOR_STEPS, DIR, STEP, MS1, MS2, MS3);   // Stepper motor at the front left
-A4988 stepperFrontRight(MOTOR_STEPS, DIR, STEP, MS4, MS5, MS6); //
+#define dirPin2 8
+#define pulsePin2 9
 
 
 
+AccelStepper stepperFrontRight(1,pulsePin1, dirPin1); 
+AccelStepper stepperFrontLeft(1, pulsePin2, dirPin2); 
 
 
 
+/*
 
 
 
@@ -57,9 +53,10 @@ void move_forward(float distance, float vel) {
   stepperFrontRight.move(-steps);
 }
 
+*/
 
 
-
+/*
 
 
 void move_backward(float distance, float vel){
@@ -104,6 +101,9 @@ void rotate_clockwise(float degrees, float angVel){
   stepperFrontRight.move(steps);
 }
 
+*/
+
+/*
 
 
 void rotate_anticlockwise(float degrees, float angVel){
@@ -128,15 +128,23 @@ void rotate_anticlockwise(float degrees, float angVel){
   stepperFrontRight.move(-steps);
 }
 
+*/
 
 
-
+int speed1;
+int speed2;
 
 
 
 void setup() {
   // put your setup code here, to run once:
+  stepperFrontRight.setMaxSpeed(200);
+  stepperFrontRight.setAcceleration(100);
+  stepperFrontRight.moveTo(200);
 
+  stepperFrontLeft.setMaxSpeed(200);
+  stepperFrontLeft.setAcceleration(100);
+  stepperFrontLeft.moveTo(-200);
 
 
 
@@ -144,3 +152,6 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  stepperFrontRight.run();
+  stepperFrontLeft.run();
+}

@@ -86,49 +86,77 @@ void microStep(int stepFrac){
 }
 
 
-
-void move_forward(float distance, float vel) {
-  
-  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
-
+// movement function in mm
+void move_forward(float distance) {
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
+  stepperFrontRight.setMaxSpeed(maxSpeed);
+  stepperFrontRight.setAcceleration(accel);
+  stepperFrontRight.moveTo(steps);
 
+  stepperFrontLeft.setMaxSpeed(maxSpeed);
+  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontLeft.moveTo(-steps);
+
+  stepperFrontRight.run();
+  stepperFrontLeft.run();
 }
 
 
 
-void move_backward(float distance, float vel){
-  
-  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
-
+void move_backward(float distance){
   int steps = (100/pi)*(distance/WHEELRADIUS);
+
+  stepperFrontRight.setMaxSpeed(maxSpeed);
+  stepperFrontRight.setAcceleration(accel);
+  stepperFrontRight.moveTo(steps);
+
+  stepperFrontLeft.setMaxSpeed(maxSpeed);
+  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontLeft.moveTo(-steps);
+
+  stepperFrontRight.run();
+  stepperFrontLeft.run();
 
 }
 
 //angVel is in degrees per second
-void rotate_clockwise(float degrees, float angVel){
-  float vel = (angVel * (2*pi/360)) * wheelCenterRadius;
+void rotate_clockwise(float degrees){
 
   float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
 
-  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
-
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
+  stepperFrontRight.setMaxSpeed(maxSpeed);
+  stepperFrontRight.setAcceleration(accel);
+  stepperFrontRight.moveTo(steps);
+
+  stepperFrontLeft.setMaxSpeed(maxSpeed);
+  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontLeft.moveTo(-steps);
+
+  stepperFrontRight.run();
+  stepperFrontLeft.run(); 
 }
 
 
 
-void rotate_anticlockwise(float degrees, float angVel){
-  float vel = (angVel * (2*pi/360)) * wheelCenterRadius;
+void rotate_anticlockwise(float degrees){
 
   float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
 
-  int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
-
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
+  stepperFrontRight.setMaxSpeed(maxSpeed);
+  stepperFrontRight.setAcceleration(accel);
+  stepperFrontRight.moveTo(steps);
+
+  stepperFrontLeft.setMaxSpeed(maxSpeed);
+  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontLeft.moveTo(-steps);
+
+  stepperFrontRight.run();
+  stepperFrontLeft.run();
 }
 
 

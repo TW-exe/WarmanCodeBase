@@ -1,6 +1,6 @@
 //libraries
 #include <Arduino.h>
-#include <AccelStepper.h>
+#include <accelStepper.h>
 
 
 
@@ -12,16 +12,23 @@ const int WHEELRADIUS = 40; //in mm
 
 const float wheelCenterRadius = 180; //in mm
 
+const int maxSpeed = 1000; //steps per second
+
+const int accel = 50; // steps per second per second
+
 //Math constants
 const float pi = 3.1415926;
 
 //Pin constants
-#define dirPin1 8
-#define pulsePin1 9
+#define dirPin1 4
+#define pulsePin1 7
 
-#define dirPin2 8
-#define pulsePin2 9
+#define dirPin2 3
+#define pulsePin2 6
 
+const int MS1pin = 8;
+const int MS2pin = 9;
+const int MS3pin = 10;
 
 
 AccelStepper stepperFrontRight(1,pulsePin1, dirPin1); 
@@ -29,34 +36,66 @@ AccelStepper stepperFrontLeft(1, pulsePin2, dirPin2);
 
 
 
-/*
-
-
-
 // Functions 
+
+//micro step initialisation funciton
+void microStep(int stepFrac){
+  pinMode(MS1pin, OUTPUT);
+  pinMode(MS2pin, OUTPUT);
+  pinMode(MS3pin, OUTPUT);
+
+  switch (stepFrac)
+  {
+  case 1:
+    digitalWrite(MS1pin, LOW);
+    digitalWrite(MS2pin, LOW);
+    digitalWrite(MS3pin, LOW);
+    break;
+
+  case 2:
+    digitalWrite(MS1pin, HIGH);
+    digitalWrite(MS2pin, LOW);
+    digitalWrite(MS3pin, LOW);
+    break;
+  
+  case 4:
+    digitalWrite(MS1pin, LOW);
+    digitalWrite(MS2pin, HIGH);
+    digitalWrite(MS3pin, LOW);
+    break;
+
+  case 8:
+    digitalWrite(MS1pin, HIGH);
+    digitalWrite(MS2pin, HIGH);
+    digitalWrite(MS3pin, LOW);
+    break;
+
+  case 16:
+    digitalWrite(MS1pin, HIGH);
+    digitalWrite(MS2pin, HIGH);
+    digitalWrite(MS3pin, HIGH);
+    break;
+  
+  
+  default:
+    digitalWrite(MS1pin, LOW);
+    digitalWrite(MS2pin, LOW);
+    digitalWrite(MS3pin, LOW);
+    break;
+  }
+}
+
+
+
 void move_forward(float distance, float vel) {
   
   int RPM = (vel/(40))*(30/pi); // velocity is in mm per second
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontLeft.begin(RPM);
-  stepperFrontRight.begin(RPM);
 
-  stepperFrontLeft.enable();
-  stepperFrontRight.enable();
-
-  stepperFrontLeft.setMicrostep(1);
-  stepperFrontRight.setMicrostep(1);
-
-  stepperFrontLeft.move(steps);
-  stepperFrontRight.move(-steps);
 }
 
-*/
-
-
-/*
 
 
 void move_backward(float distance, float vel){
@@ -65,17 +104,6 @@ void move_backward(float distance, float vel){
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontLeft.begin(RPM);
-  stepperFrontRight.begin(RPM);
-
-  stepperFrontLeft.enable();
-  stepperFrontRight.enable();
-
-  stepperFrontLeft.setMicrostep(1);
-  stepperFrontRight.setMicrostep(1);
-
-  stepperFrontLeft.move(steps);
-  stepperFrontRight.move(-steps);
 }
 
 //angVel is in degrees per second
@@ -88,22 +116,8 @@ void rotate_clockwise(float degrees, float angVel){
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontLeft.begin(RPM);
-  stepperFrontRight.begin(RPM);
-
-  stepperFrontLeft.enable();
-  stepperFrontRight.enable();
-
-  stepperFrontLeft.setMicrostep(1);
-  stepperFrontRight.setMicrostep(1);
-
-  stepperFrontLeft.move(steps);
-  stepperFrontRight.move(steps);
 }
 
-*/
-
-/*
 
 
 void rotate_anticlockwise(float degrees, float angVel){
@@ -115,43 +129,15 @@ void rotate_anticlockwise(float degrees, float angVel){
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontLeft.begin(RPM);
-  stepperFrontRight.begin(RPM);
-
-  stepperFrontLeft.enable();
-  stepperFrontRight.enable();
-
-  stepperFrontLeft.setMicrostep(1);
-  stepperFrontRight.setMicrostep(1);
-
-  stepperFrontLeft.move(-steps);
-  stepperFrontRight.move(-steps);
 }
-
-*/
-
-
-int speed1;
-int speed2;
-
 
 
 void setup() {
   // put your setup code here, to run once:
-  stepperFrontRight.setMaxSpeed(200);
-  stepperFrontRight.setAcceleration(100);
-  stepperFrontRight.moveTo(200);
-
-  stepperFrontLeft.setMaxSpeed(200);
-  stepperFrontLeft.setAcceleration(100);
-  stepperFrontLeft.moveTo(-200);
-
-
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  stepperFrontRight.run();
-  stepperFrontLeft.run();
+
 }

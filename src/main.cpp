@@ -20,15 +20,16 @@ const int accel = 50; // steps per second per second
 const float pi = 3.1415926;
 
 //Pin constants
-#define dirPin1 4
-#define pulsePin1 7
+#define pulsePin1 3
+#define dirPin1 2
 
-#define dirPin2 3
-#define pulsePin2 6
+#define pulsePin2 5
+#define dirPin2 4
 
-const int MS1pin = 8;
-const int MS2pin = 9;
-const int MS3pin = 10;
+
+const int MS1pin = 13;
+const int MS2pin = 12;
+const int MS3pin = 11;
 
 
 AccelStepper stepperFrontRight(1,pulsePin1, dirPin1); 
@@ -103,7 +104,7 @@ void move_forward(float distance) {
 }
 
 
-
+// movement function in mm
 void move_backward(float distance){
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
@@ -120,7 +121,7 @@ void move_backward(float distance){
 
 }
 
-//angVel is in degrees per second
+//rotation of system in degrees
 void rotate_clockwise(float degrees){
 
   float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
@@ -140,7 +141,7 @@ void rotate_clockwise(float degrees){
 }
 
 
-
+//rotation of system in degrees
 void rotate_anticlockwise(float degrees){
 
   float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
@@ -162,7 +163,9 @@ void rotate_anticlockwise(float degrees){
 
 void setup() {
   // put your setup code here, to run once:
+  microStep(1);
 
+  move_forward(100.0);
 }
 
 void loop() {

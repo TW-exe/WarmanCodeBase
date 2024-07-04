@@ -90,17 +90,15 @@ void microStep(int stepFrac){
 // movement function in mm
 void move_forward(float distance) {
   int steps = (100/pi)*(distance/WHEELRADIUS);
-
-  stepperFrontRight.setMaxSpeed(maxSpeed);
-  stepperFrontRight.setAcceleration(accel);
   stepperFrontRight.moveTo(steps);
-
-  stepperFrontLeft.setMaxSpeed(maxSpeed);
-  stepperFrontLeft.setAcceleration(accel);
   stepperFrontLeft.moveTo(-steps);
 
-  stepperFrontRight.run();
-  stepperFrontLeft.run();
+
+  // Synchronize the motors
+  while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
+    stepperFrontRight.run();
+    stepperFrontLeft.run();
+  }
 }
 
 
@@ -108,17 +106,14 @@ void move_forward(float distance) {
 void move_backward(float distance){
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontRight.setMaxSpeed(maxSpeed);
-  stepperFrontRight.setAcceleration(accel);
   stepperFrontRight.moveTo(steps);
-
-  stepperFrontLeft.setMaxSpeed(maxSpeed);
-  stepperFrontLeft.setAcceleration(accel);
   stepperFrontLeft.moveTo(-steps);
 
-  stepperFrontRight.run();
-  stepperFrontLeft.run();
-
+  // Synchronize the motors
+  while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
+    stepperFrontRight.run();
+    stepperFrontLeft.run();
+  }
 }
 
 //rotation of system in degrees
@@ -128,16 +123,16 @@ void rotate_clockwise(float degrees){
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontRight.setMaxSpeed(maxSpeed);
-  stepperFrontRight.setAcceleration(accel);
-  stepperFrontRight.moveTo(steps);
 
-  stepperFrontLeft.setMaxSpeed(maxSpeed);
-  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontRight.moveTo(steps);
   stepperFrontLeft.moveTo(steps);
 
-  stepperFrontRight.run();
-  stepperFrontLeft.run(); 
+  // Synchronize the motors
+  while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
+    stepperFrontRight.run();
+    stepperFrontLeft.run();
+  }
+
 }
 
 
@@ -148,22 +143,28 @@ void rotate_anticlockwise(float degrees){
 
   int steps = (100/pi)*(distance/WHEELRADIUS);
 
-  stepperFrontRight.setMaxSpeed(maxSpeed);
-  stepperFrontRight.setAcceleration(accel);
-  stepperFrontRight.moveTo(-steps);
 
-  stepperFrontLeft.setMaxSpeed(maxSpeed);
-  stepperFrontLeft.setAcceleration(accel);
+  stepperFrontRight.moveTo(-steps);
   stepperFrontLeft.moveTo(-steps);
 
-  stepperFrontRight.run();
-  stepperFrontLeft.run();
+  // Synchronize the motors
+  while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
+    stepperFrontRight.run();
+    stepperFrontLeft.run();
+  }
+
 }
 
 
 void setup() {
   // put your setup code here, to run once:
   microStep(1);
+
+
+  stepperFrontRight.setMaxSpeed(maxSpeed);
+  stepperFrontRight.setAcceleration(accel);
+  stepperFrontLeft.setMaxSpeed(maxSpeed);
+  stepperFrontLeft.setAcceleration(accel);
 
 }
 

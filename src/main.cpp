@@ -8,13 +8,13 @@
 // Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
 const float MOTOR_STEPS = 200;
 
-const int WHEELRADIUS = 40; //in mm 
+const int WHEELRADIUS = 50; //in mm 
 
-const float wheelCenterRadius = 180; //in mm
+const float wheelCenterRadius = 380/2; //in mm
 
-const int maxSpeed = 1000; //steps per second
+const int maxSpeed = 400; //steps per second
 
-const int accel = 50; // steps per second per second
+const int accel =150; // steps per second per second
 
 //Math constants
 const float pi = 3.1415926;
@@ -134,7 +134,7 @@ void rotate_clockwise(float degrees){
 
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
-  stepperFrontLeft.moveTo(-steps);
+  stepperFrontLeft.moveTo(steps);
 
   stepperFrontRight.run();
   stepperFrontLeft.run(); 
@@ -150,7 +150,7 @@ void rotate_anticlockwise(float degrees){
 
   stepperFrontRight.setMaxSpeed(maxSpeed);
   stepperFrontRight.setAcceleration(accel);
-  stepperFrontRight.moveTo(steps);
+  stepperFrontRight.moveTo(-steps);
 
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
@@ -165,10 +165,9 @@ void setup() {
   // put your setup code here, to run once:
   microStep(1);
 
-  move_forward(100.0);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  rotate_clockwise(90.0);
 }

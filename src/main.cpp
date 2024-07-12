@@ -6,7 +6,7 @@
 #include <Wire.h>
 #include <SPI.h>
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -70,15 +70,10 @@ void pushStart(){
       delay(1000);
       digitalWrite(ledPin, LOW); // turn the LED on
       delay(400);
-
       break;
-
     } 
-
   }
 }
-
-
 
 
 //micro step initialisation funciton
@@ -133,6 +128,8 @@ void move_forward(float distance) {
   int steps = (100/pi)*(distance/WHEELRADIUS);
   stepperFrontRight.moveTo(steps);
   stepperFrontLeft.moveTo(-steps);
+  stepperFrontRight.run();
+  stepperFrontLeft.run();
 
   // Synchronize the motors
   while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
@@ -169,8 +166,6 @@ void rotate_clockwise(float degrees){
   }
 }
 
-
-
 //rotation of system in degrees
 void rotate_anticlockwise(float degrees){
   float distance = (degrees * (2*pi/360)) * wheelCenterRadius;
@@ -185,18 +180,12 @@ void rotate_anticlockwise(float degrees){
   }
 }
 
-
-
-
 // Servo functions 
 
 
 void servoStartUp(){
 
 }
-
-
-
 
 
 void servo1Mov(int setAngle, bool strike){
@@ -207,7 +196,6 @@ void servo1Mov(int setAngle, bool strike){
   if(strike){
     servo1.write(angle-20);
     delay(600);
-    
     servo1.write(angle);
     delay(600);
   }
@@ -221,7 +209,6 @@ void servo2Mov(int setAngle, bool strike){
   if(strike){
     servo2.write(angle-20);
     delay(600);
-    
     servo2.write(angle);
     delay(600);
   }
@@ -235,7 +222,6 @@ void servo3Mov(int setAngle, bool strike){
   if(strike){
     servo3.write(angle+20);
     delay(600);
-    
     servo3.write(angle);
     delay(600);
   }
@@ -249,20 +235,12 @@ void servo4Mov(int setAngle, bool strike){
   if(strike){
     servo4.write(angle+20);
     delay(600);
-    
     servo4.write(angle);
     delay(600);
   }
 }
 
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 void setup() {
@@ -270,13 +248,14 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP); // initialize the button pin as a pull-up input
   pinMode(ledPin, OUTPUT);          // initialize the LED pin as an output  
 
+  pinMode(10,OUTPUT);
+  pinMode(7,OUTPUT);
+
   //servo setup
   servo1.attach(A0);
   servo2.attach(A1);
   servo3.attach(A2);
   servo4.attach(A3);
-
-
 
   //stepper setup
   microStep(1);
@@ -284,12 +263,10 @@ void setup() {
   stepperFrontRight.setAcceleration(accel);
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
-    
+
+
 
 }
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -297,7 +274,10 @@ void setup() {
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
+  move_forward(300.0);
 
+  pushStart();
+  move_backward(300.0);
 
 
 }

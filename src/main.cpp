@@ -18,9 +18,9 @@ const int WHEELRADIUS = 50; //in mm
 
 const float wheelCenterRadius = 380/2; //in mm
 
-const int maxSpeed = 400; //steps per second
+const int maxSpeed = 200; //steps per second
 
-const int accel = 100; // steps per second per second
+const int accel = 50; // steps per second per second
 
 const int maxServoAngle = 180;
 
@@ -126,8 +126,8 @@ void microStep(int stepFrac){
 // movement function in mm
 void move_forward(float distance) {
   int steps = (100/pi)*(distance/WHEELRADIUS);
-  stepperFrontRight.moveTo(steps);
-  stepperFrontLeft.moveTo(-steps);
+  stepperFrontRight.moveTo(-steps);
+  stepperFrontLeft.moveTo(steps);
   stepperFrontRight.run();
   stepperFrontLeft.run();
 
@@ -142,8 +142,8 @@ void move_forward(float distance) {
 // movement function in mm
 void move_backward(float distance){
   int steps = (100/pi)*(distance/WHEELRADIUS);
-  stepperFrontRight.moveTo(-steps);
-  stepperFrontLeft.moveTo(steps);
+  stepperFrontRight.moveTo(steps);
+  stepperFrontLeft.moveTo(-steps);
 
   // Synchronize the motors
   while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
@@ -278,6 +278,8 @@ void loop() {
 
   pushStart();
   move_backward(300.0);
+  pushStart();
+  rotate_clockwise(90.0);
 
 
 }

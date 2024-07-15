@@ -11,16 +11,16 @@
 
 
 
-// Motor steps per revolution. Most steppers are 200 steps or 1.8 degrees/step
+// stepper/servo constants
 const float MOTOR_STEPS = 200;
 
 const int WHEELRADIUS = 50; //in mm 
 
-const float wheelCenterRadius = 380/2; //in mm
+const float wheelCenterRadius = 240/2; //in mm
 
-const int maxSpeed = 200; //steps per second
+const int maxSpeed = 400; //steps per second
 
-const int accel = 50; // steps per second per second
+const int accel = 100; // steps per second per second
 
 const int maxServoAngle = 180;
 
@@ -28,12 +28,16 @@ const int maxServoAngle = 180;
 const float pi = 3.1415926;
 
 
-//start constants
+//start pins
 const int buttonPin = 8; // the pin that the button is attached to
 const int ledPin = 13;   // the pin that the LED is attached to (built-in LED on most Arduino boards)
 
+//arm constants
+const int armPin1 = 10;
+const int armPin2 = 7;
 
-//stepper constants
+
+//stepper pins
 #define pulsePin1 3
 #define dirPin1 2
 
@@ -128,8 +132,6 @@ void move_forward(float distance) {
   int steps = (100/pi)*(distance/WHEELRADIUS);
   stepperFrontRight.moveTo(-steps);
   stepperFrontLeft.moveTo(steps);
-  stepperFrontRight.run();
-  stepperFrontLeft.run();
 
   // Synchronize the motors
   while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
@@ -145,12 +147,14 @@ void move_backward(float distance){
   stepperFrontRight.moveTo(steps);
   stepperFrontLeft.moveTo(-steps);
 
+
   // Synchronize the motors
   while (stepperFrontRight.distanceToGo() != 0 || stepperFrontLeft.distanceToGo() != 0) {
     stepperFrontRight.run();
     stepperFrontLeft.run();
   }
 }
+
 
 //rotation of system in degrees
 void rotate_clockwise(float degrees){
@@ -179,6 +183,17 @@ void rotate_anticlockwise(float degrees){
     stepperFrontLeft.run();
   }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 // Servo functions 
 
@@ -240,6 +255,25 @@ void servo4Mov(int setAngle, bool strike){
   }
 }
 
+
+
+
+//arm rotation
+
+void armClockwise(float runTime){
+  digitalWrite(armPin2, HIGH);
+  delay(runTime);  
+  digitalWrite(armPin2,LOW);
+}
+
+void armAntiClockwise(float runTime){
+  digitalWrite(armPin1, HIGH);
+  delay(runTime);  
+  digitalWrite(armPin1,LOW);
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -274,12 +308,21 @@ void setup() {
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
-  move_forward(300.0);
+  armClockwise(200.0);
+  delay(300);
+  armAntiClockwise(200.0);
+  delay(300);
 
-  pushStart();
-  move_backward(300.0);
-  pushStart();
-  rotate_clockwise(90.0);
+  move_forward(-300.0);
+  delay(300);
+
+  move_forward(0);
+  delay(300);
+
+  rotate_clockwise(-90.0);
+  delay(300);
+
+
 
 
 }

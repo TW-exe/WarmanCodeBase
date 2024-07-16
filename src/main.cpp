@@ -24,6 +24,9 @@ const int accel = 100; // steps per second per second
 
 const int maxServoAngle = 180;
 
+const float armInitialAngle = 90.0;
+const float armMotionCoeff = 200;
+
 //Math constants
 const float pi = 3.1415926;
 
@@ -195,14 +198,11 @@ void rotate_anticlockwise(float degrees){
 
 
 
-// Servo functions 
+// hand control class
 
 
-void servoStartUp(){
 
-}
-
-
+/*
 void servo1Mov(int setAngle, bool strike){
   int angle = 180-setAngle;
   servo1.write(angle);
@@ -215,6 +215,9 @@ void servo1Mov(int setAngle, bool strike){
     delay(600);
   }
 }
+*/
+
+
 
 void servo2Mov(int setAngle, bool strike){
   int angle = 180-setAngle;
@@ -308,21 +311,6 @@ void setup() {
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
-  armClockwise(200.0);
-  delay(300);
-  armAntiClockwise(200.0);
-  delay(300);
-
-  move_forward(-300.0);
-  delay(300);
-
-  move_forward(0);
-  delay(300);
-
-  rotate_clockwise(-90.0);
-  delay(300);
-
-
-
+  armAntiClockwise(730);
 
 }

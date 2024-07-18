@@ -57,6 +57,13 @@ const int MS3pin = 11;
 AccelStepper stepperFrontRight(1,pulsePin1, dirPin1); 
 AccelStepper stepperFrontLeft(1, pulsePin2, dirPin2); 
 
+
+
+
+//flap construct
+Servo servo3;
+Servo servo4;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -79,7 +86,6 @@ void pushStart(){
 
 // hand control class
 class Hands{
-
   public:
     Servo servo;
     int openPosition;
@@ -254,8 +260,7 @@ void rotate_anticlockwise(float degrees){
 
 
 
-//arm rotation
-
+//arm rotations
 void armClockwise(float runTime){
   digitalWrite(armPin2, HIGH);
   delay(runTime);  
@@ -270,17 +275,49 @@ void armAntiClockwise(float runTime){
 
 
 
-//servo construct 
+//Functions for Flaps
+void right_flap_closed(){
+  servo3.write(20);
+  delay(600);
+}
+
+
+void right_flap_open(){
+  servo3.write(180);
+  delay(600);
+}
+
+
+void left_flap_closed(){
+  servo4.write(180);
+  delay(600);
+}
+
+
+void left_flap_open(){
+  servo4.write(20);
+  delay(600);
+}
+
+
+void shake(){
+  //shake code
+  for(int i=0;i<6;i++){
+  move_forward(100);
+  move_backward(100);
+  }
+}
+
+
+
+//hand construct
 Hands hand1;
 Hands hand2;
-//Hands hand3(A2);
-//Hands hand4(A3);
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
 void setup() {
+  Serial.begin(9600);
   // put your setup code here, to run once:
   pinMode(buttonPin, INPUT_PULLUP); // initialize the button pin as a pull-up input
   pinMode(ledPin, OUTPUT);          // initialize the LED pin as an output  
@@ -289,11 +326,19 @@ void setup() {
   pinMode(armPin2,OUTPUT);
 
   hand1.attach(A0);
+  hand2.attach(A1);
+  
+  servo4.attach(A2);
+  servo3.attach(A3);
+  
 
-  //servo setup
-  hand1.openPosition = 0;
-  hand1.closedPosition = 120;
-  hand1.hitPosition = 30;
+  hand1.openPosition = 5;
+  hand1.closedPosition = 90;
+  hand1.hitPosition = 17;
+
+  hand2.openPosition = 0;
+  hand2.closedPosition = 90;
+  hand2.hitPosition = 20;
 
   //stepper setup
   microStep(1);
@@ -301,6 +346,12 @@ void setup() {
   stepperFrontRight.setAcceleration(accel);
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
+
+  right_flap_closed();
+  delay(5000);
+  left_flap_closed();
+  
+    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -309,20 +360,37 @@ void setup() {
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
+  
 
+
+  /*
   //Deploy arm half way
+  armClockwise(800);
 
   //Open hands 1 and 2
+  hand1.open();
+  delay(1000);
 
   //Deploy arm full way
-
+  armClockwise(400);
   //Kick hands in sequential order
-
+  left_flap_open();
+  hand1.hit();
+  delay(1000);
   //Retraact arm half way
-
+  armAntiClockwise(700);
   //Close hands 1 and 2
+  hand1.close();
+  hand2.close();
 
   //Navigate to Incinerator
+  move_backward(200);
+  delay(400);
+  rotate_anticlockwise(90);
+  move_forward(300);
+
+  //hips dont lie
+  shake();
 
   //Navigate to other Side
 
@@ -337,5 +405,5 @@ void loop() {
   //Close hands 3 and 4
 
   //Navigate to Incinerator
-
+  */
 }

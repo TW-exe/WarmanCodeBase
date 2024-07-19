@@ -6,6 +6,7 @@
 #include <Wire.h>
 #include <SPI.h>
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -56,14 +57,12 @@ const int MS3pin = 11;
 AccelStepper stepperFrontRight(1,pulsePin1, dirPin1); 
 AccelStepper stepperFrontLeft(1, pulsePin2, dirPin2); 
 
-//servo construct 
-Servo servo1;
-Servo servo2;
+
+
+
+//flap construct
 Servo servo3;
 Servo servo4;
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,9 +77,66 @@ void pushStart(){
       digitalWrite(ledPin, LOW); // turn the LED on
       delay(400);
       break;
-    } 
+    }
   }
 }
+
+
+
+
+// hand control class
+class Hands{
+  public:
+    Servo servo;
+    int openPosition;
+    int closedPosition;
+    int hitPosition;
+    int currentPosition;
+
+    //Constructor 
+    Hands(){
+      openPosition = 0;
+      hitPosition = 20;
+      closedPosition = 180;
+      currentPosition = openPosition;
+    }
+
+    void attach(int pin){
+      servo.attach(pin);
+      servo.write(currentPosition); // Move servo to initial position
+    }
+
+  
+    // Method to open the hand
+    void open() {
+        currentPosition = openPosition;
+        servo.write(currentPosition);
+        delay(600);
+
+    }
+
+    // Method to hit the ball
+    void hit() {
+        currentPosition = hitPosition;
+        servo.write(currentPosition);
+        delay(600);
+    }
+
+    // Method to close the hand
+    void close() {
+        currentPosition = closedPosition;
+        servo.write(currentPosition);
+        delay(600);
+    }
+
+    // Method to close the hand by a certain degree
+    void closeByDegrees(int degrees) {
+        currentPosition = degrees;
+        servo.write(currentPosition);
+        delay(600);
+    }
+  };
+
 
 
 //micro step initialisation funciton
@@ -141,6 +197,10 @@ void move_forward(float distance) {
     stepperFrontRight.run();
     stepperFrontLeft.run();
   }
+  
+  // Reset positions to zero
+  stepperFrontLeft.setCurrentPosition(0);
+  stepperFrontRight.setCurrentPosition(0);
 }
 
 
@@ -156,6 +216,9 @@ void move_backward(float distance){
     stepperFrontRight.run();
     stepperFrontLeft.run();
   }
+  // Reset positions to zero
+  stepperFrontLeft.setCurrentPosition(0);
+  stepperFrontRight.setCurrentPosition(0);
 }
 
 
@@ -171,6 +234,10 @@ void rotate_clockwise(float degrees){
     stepperFrontRight.run();
     stepperFrontLeft.run();
   }
+  
+  // Reset positions to zero
+  stepperFrontLeft.setCurrentPosition(0);
+  stepperFrontRight.setCurrentPosition(0);
 }
 
 //rotation of system in degrees
@@ -185,84 +252,15 @@ void rotate_anticlockwise(float degrees){
     stepperFrontRight.run();
     stepperFrontLeft.run();
   }
+  
+  // Reset positions to zero
+  stepperFrontLeft.setCurrentPosition(0);
+  stepperFrontRight.setCurrentPosition(0);
 }
 
 
 
-
-
-
-
-
-
-
-
-
-// hand control class
-
-
-
-/*
-void servo1Mov(int setAngle, bool strike){
-  int angle = 180-setAngle;
-  servo1.write(angle);
-  delay(600);
-
-  if(strike){
-    servo1.write(angle-20);
-    delay(600);
-    servo1.write(angle);
-    delay(600);
-  }
-}
-*/
-
-
-
-void servo2Mov(int setAngle, bool strike){
-  int angle = 180-setAngle;
-  servo2.write(angle);
-  delay(600);
-
-  if(strike){
-    servo2.write(angle-20);
-    delay(600);
-    servo2.write(angle);
-    delay(600);
-  }
-}
-
-void servo3Mov(int setAngle, bool strike){
-  int angle = setAngle;
-  servo3.write(angle);
-  delay(600);
-
-  if(strike){
-    servo3.write(angle+20);
-    delay(600);
-    servo3.write(angle);
-    delay(600);
-  }
-}
-
-void servo4Mov(int setAngle, bool strike){
-  int angle = setAngle;
-  servo4.write(angle);
-  delay(600);
-
-  if(strike){
-    servo4.write(angle+20);
-    delay(600);
-    servo4.write(angle);
-    delay(600);
-  }
-}
-
-
-
-
-//arm rotation
-
+//arm rotations
 void armClockwise(float runTime){
   digitalWrite(armPin2, HIGH);
   delay(runTime);  
@@ -277,22 +275,78 @@ void armAntiClockwise(float runTime){
 
 
 
+//Functions for Flaps
+void right_flap_closed(){
+  servo3.write(20);
+  delay(600);
+}
+
+
+void right_flap_open(){
+  servo3.write(180);
+  delay(600);
+}
+
+
+void left_flap_closed(){
+  servo4.write(180);
+  delay(600);
+}
+
+
+void left_flap_open(){
+  servo4.write(20);
+  delay(600);
+}
+
+
+void shake(){
+  //shake code
+  for(int i=0;i<4;i++){
+  move_forward(100);
+  rotate_clockwise(45);
+  move_backward(100);
+  rotate_anticlockwise(45);
+  move_forward(100);
+  move_backward(100);
+  rotate_anticlockwise(45);
+  move_forward(100);
+  move_backward(100);
+  rotate_clockwise(45);
+  }
+}
+
+
+
+//hand construct
+Hands hand1;
+Hands hand2;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
 void setup() {
+  Serial.begin(9600);
   // put your setup code here, to run once:
   pinMode(buttonPin, INPUT_PULLUP); // initialize the button pin as a pull-up input
   pinMode(ledPin, OUTPUT);          // initialize the LED pin as an output  
+  
+  pinMode(armPin1,OUTPUT);
+  pinMode(armPin2,OUTPUT);
 
-  pinMode(10,OUTPUT);
-  pinMode(7,OUTPUT);
+  hand1.attach(A0);
+  hand2.attach(A1);
+  
+  servo4.attach(A2);
+  servo3.attach(A3);
+  
 
-  //servo setup
-  servo1.attach(A0);
-  servo2.attach(A1);
-  servo3.attach(A2);
-  servo4.attach(A3);
+  hand1.openPosition = 5;
+  hand1.closedPosition = 70;
+  hand1.hitPosition = 17;
+
+  hand2.openPosition = 0;
+  hand2.closedPosition = 90;
+  hand2.hitPosition = 20;
 
   //stepper setup
   microStep(1);
@@ -301,16 +355,148 @@ void setup() {
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
 
-
-
+  left_flap_closed();
+  right_flap_closed();
+    
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
+int i = 600;
 
 
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
-  armAntiClockwise(730);
+  move_forward(100);
+  delay(600);
 
+  //ball 1
+  armClockwise(1600);
+  armAntiClockwise(1000);
+  delay(i);
+
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(400-130);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
+
+
+  //ball 2
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(600-210);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
+  
+  
+  //ball 3
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(900);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(600-150);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(200);
+  delay(i);
+
+  //ball 4
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(500-200);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
+
+  //ball 5
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(400);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(700);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+
+
+  shake();
+
+
+  /*
+  //Deploy arm half way
+  armClockwise(800);
+
+  //Open hands 1 and 2
+  hand1.open();
+  delay(1000);
+
+  //Deploy arm full way
+  armClockwise(400);
+  //Kick hands in sequential order
+  left_flap_open();
+  hand1.hit();
+  delay(1000);
+  //Retraact arm half way
+  armAntiClockwise(700);
+  //Close hands 1 and 2
+  hand1.close();
+  hand2.close();
+
+  //Navigate to Incinerator
+  move_backward(200);
+  delay(400);
+  rotate_anticlockwise(90);
+  move_forward(300);
+
+  //hips dont lie
+  shake();
+
+  //Navigate to other Side
+
+  //Open hands 3 and 4
+
+  //Deploy arm full way
+
+  //Kick hands in sequential order
+
+  //Retraact arm half way
+
+  //Close hands 3 and 4
+
+  //Navigate to Incinerator
+  */
 }

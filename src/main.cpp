@@ -378,8 +378,11 @@ void loop() {
 
   move_backward(400);
   delay(i);
-  rotate_anticlockwise(90);
+
+  rotate_clockwise(90);
   delay(i);
+
+  /*
   move_forward(400-130);
   delay(i);
   rotate_clockwise(90);
@@ -423,8 +426,8 @@ void loop() {
   delay(i);
 
   //ball 4
-  armClockwise(800);
-  armAntiClockwise(1000);
+  armClockwise(400);
+  armAntiClockwise(500);
   delay(i);
 
   move_backward(400);
@@ -454,7 +457,7 @@ void loop() {
 
 
   shake();
-
+  */
 
   /*
   //Deploy arm half way

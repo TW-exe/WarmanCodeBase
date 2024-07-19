@@ -302,9 +302,17 @@ void left_flap_open(){
 
 void shake(){
   //shake code
-  for(int i=0;i<6;i++){
+  for(int i=0;i<4;i++){
+  move_forward(100);
+  rotate_clockwise(45);
+  move_backward(100);
+  rotate_anticlockwise(45);
   move_forward(100);
   move_backward(100);
+  rotate_anticlockwise(45);
+  move_forward(100);
+  move_backward(100);
+  rotate_clockwise(45);
   }
 }
 
@@ -333,7 +341,7 @@ void setup() {
   
 
   hand1.openPosition = 5;
-  hand1.closedPosition = 90;
+  hand1.closedPosition = 70;
   hand1.hitPosition = 17;
 
   hand2.openPosition = 0;
@@ -347,20 +355,105 @@ void setup() {
   stepperFrontLeft.setMaxSpeed(maxSpeed);
   stepperFrontLeft.setAcceleration(accel);
 
-  right_flap_closed();
-  delay(5000);
   left_flap_closed();
-  
+  right_flap_closed();
     
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
+int i = 600;
 
 
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
+  move_forward(100);
+  delay(600);
+
+  //ball 1
+  armClockwise(1600);
+  armAntiClockwise(1000);
+  delay(i);
+
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(400-130);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
+
+
+  //ball 2
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(600-210);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
   
+  
+  //ball 3
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(900);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(600-150);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(200);
+  delay(i);
+
+  //ball 4
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(400);
+  delay(i);
+  rotate_anticlockwise(90);
+  delay(i);
+  move_forward(500-200);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(450);
+  delay(i);
+
+  //ball 5
+  armClockwise(800);
+  armAntiClockwise(1000);
+  delay(i);
+
+  move_backward(400);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+  move_forward(700);
+  delay(i);
+  rotate_clockwise(90);
+  delay(i);
+
+
+  shake();
 
 
   /*

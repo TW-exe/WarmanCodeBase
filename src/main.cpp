@@ -361,103 +361,95 @@ void setup() {
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-int i = 600;
+int i = 2000;
+float angle =  90;
 
 
 void loop() {
   //whatever you want to test put it under the push start function
   pushStart();
-  move_forward(100);
-  delay(600);
+  move_forward(200.0);
+  delay(i);
 
   //ball 1
-  armClockwise(1600);
-  armAntiClockwise(1000);
+  armClockwise(1600.0);
+  armAntiClockwise(1000.0);
   delay(i);
 
 
-  move_backward(400);
+  move_backward(400.0);
   delay(i);
 
-  rotate_clockwise(90);
+  rotate_anticlockwise(angle);
   delay(i);
 
-  /*
-  move_forward(400-130);
+  move_forward(400.0-130.0);
   delay(i);
-  rotate_clockwise(90);
+  rotate_clockwise(angle);
   delay(i);
-  move_forward(450);
+  move_forward(450.0);
   delay(i);
 
 
   //ball 2
-  armClockwise(800);
-  armAntiClockwise(1000);
+  armClockwise(800.0);
+  armAntiClockwise(1000.0);
   delay(i);
 
 
-  move_backward(400);
+  move_backward(400.0);
   delay(i);
-  rotate_anticlockwise(90);
+  rotate_anticlockwise(angle);
   delay(i);
-  move_forward(600-210);
+  move_forward(205.0);
   delay(i);
-  rotate_clockwise(90);
+  rotate_clockwise(angle);
   delay(i);
-  move_forward(450);
+  move_forward(450.0);
   delay(i);
   
   
   //ball 3
-  armClockwise(800);
-  armAntiClockwise(1000);
+  armClockwise(1000.0);
+  armAntiClockwise(1000.0);
   delay(i);
 
-  move_backward(900);
-  delay(i);
-  rotate_clockwise(90);
-  delay(i);
-  move_forward(600-150);
-  delay(i);
-  rotate_clockwise(90);
-  delay(i);
-  move_forward(200);
+  move_backward(900.0);
   delay(i);
 
-  //ball 4
-  armClockwise(400);
-  armAntiClockwise(500);
+  move_forward(490);
+  delay(i);
+  rotate_clockwise(angle);
+  delay(i);
+  move_forward(400);
   delay(i);
 
-  move_backward(400);
+
+  rotate_clockwise(angle);
   delay(i);
-  rotate_anticlockwise(90);
-  delay(i);
-  move_forward(500-200);
-  delay(i);
-  rotate_clockwise(90);
-  delay(i);
-  move_forward(450);
+  move_forward(500);
   delay(i);
 
   //ball 5
-  armClockwise(800);
-  armAntiClockwise(1000);
+  armClockwise(1000.0);
+  armAntiClockwise(1000.0);
   delay(i);
 
-  move_backward(400);
+  move_backward(400.0);
   delay(i);
-  rotate_clockwise(90);
+  rotate_clockwise(angle);
   delay(i);
-  move_forward(700);
+  move_forward(300.0);
   delay(i);
-  rotate_clockwise(90);
+  rotate_anticlockwise(angle);
+  delay(i);
+  move_forward(450.0);
   delay(i);
 
-
-  shake();
-  */
+  //ball 4
+  armClockwise(400.0);
+  armAntiClockwise(500.0);
+  delay(i);
 
   /*
   //Deploy arm half way

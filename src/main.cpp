@@ -298,49 +298,6 @@ void left_flap_open(){
   servo4.write(20);
   delay(600);
 }
-
-
-void shake(){
-  //shake code
-  for(int i=0;i<4;i++){
-  move_forward(100);
-  rotate_clockwise(45);
-  move_backward(100);
-  rotate_anticlockwise(45);
-  move_forward(100);
-  move_backward(100);
-  rotate_anticlockwise(45);
-  move_forward(100);
-  move_backward(100);
-  rotate_clockwise(45);
-  }
-}
-
-
-
-//hand construct
-Hands hand1;
-Hands hand2;
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-void setup() {
-  Serial.begin(9600);
-  // put your setup code here, to run once:
-  pinMode(buttonPin, INPUT_PULLUP); // initialize the button pin as a pull-up input
-  pinMode(ledPin, OUTPUT);          // initialize the LED pin as an output  
-  
-  pinMode(armPin1,OUTPUT);
-  pinMode(armPin2,OUTPUT);
-
-  hand1.attach(A0);
-  hand2.attach(A1);
-  
-  servo4.attach(A2);
-  servo3.attach(A3);
-  
-
-  hand1.openPosition = 5;
   hand1.closedPosition = 70;
   hand1.hitPosition = 17;
 
